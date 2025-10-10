@@ -95,7 +95,7 @@ internal class WebViewProviderInfoHelper(classLoader: ClassLoader, private val p
             Logger.info("Any WebView not be found. Skip hook!")
             return null
         }
-        val webViewProviders: Any = java.lang.reflect.Array.newInstance(
+        val webViewProviders = java.lang.reflect.Array.newInstance(
             webViewProviderInfoClass,
             webViewProviderInfoListSize
         )
@@ -103,6 +103,6 @@ internal class WebViewProviderInfoHelper(classLoader: ClassLoader, private val p
             webViewProviderInfoList.toTypedArray(), 0, webViewProviders, 0,
             webViewProviderInfoListSize
         )
-        return webViewProviderInfoList
+        return webViewProviders
     }
 }
