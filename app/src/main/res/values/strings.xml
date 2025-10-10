@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name" translatable="false">MyWebView</string>
+    <string name="app_description">My WebView, my choice!</string>
+</resources>
