@@ -1,3 +1,21 @@
+/*
+ *    MyWebView
+ *    Copyright (C) 2025  ketikai
+ *
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package pers.ketikai.lsp.mywebview.help
 
 import android.annotation.SuppressLint
@@ -10,20 +28,26 @@ import java.io.InputStream
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 
-internal class WebViewProviderInfoHelper(classLoader: ClassLoader, private val packageManagerProvider: PackageManagerProvider) {
-    private val webViewProviderInfoClass = XposedHelpers.findClass(
-        "android.webkit.WebViewProviderInfo", classLoader
-    )
+internal class WebViewProviderInfoHelper(
+    classLoader: ClassLoader,
+    private val packageManagerProvider: PackageManagerProvider,
+) {
+    private val webViewProviderInfoClass =
+        XposedHelpers.findClass(
+            "android.webkit.WebViewProviderInfo",
+            classLoader,
+        )
 
-    private val webViewProviderInfoConstructor = XposedHelpers.findConstructorBestMatch(
-        webViewProviderInfoClass,
-        String::class.java,
-        String::class.java,
-        Boolean::class.javaPrimitiveType,
-        Boolean::class.javaPrimitiveType,
-        Array<String>::class.java
-    )
-    
+    private val webViewProviderInfoConstructor =
+        XposedHelpers.findConstructorBestMatch(
+            webViewProviderInfoClass,
+            String::class.java,
+            String::class.java,
+            Boolean::class.javaPrimitiveType,
+            Boolean::class.javaPrimitiveType,
+            Array<String>::class.java,
+        )
+
     @SuppressLint("QueryPermissionsNeeded")
     fun findWebViewProviderInfoArray(): Any? {
         val packageManager = packageManagerProvider.packageManager
@@ -33,7 +57,9 @@ internal class WebViewProviderInfoHelper(classLoader: ClassLoader, private val p
         }
         Logger.info("Get installed packages ...")
         val installedPackageInfoList =
-            packageManager.getInstalledPackages(PackageManager.MATCH_ALL or PackageManager.GET_META_DATA or PackageManager.GET_SIGNING_CERTIFICATES)
+            packageManager.getInstalledPackages(
+                PackageManager.MATCH_ALL or PackageManager.GET_META_DATA or PackageManager.GET_SIGNING_CERTIFICATES,
+            )
         val installedPackagesInfoListSize = installedPackageInfoList.size
         if (installedPackagesInfoListSize == 0) {
             Logger.info("Found 0 installed packages, skip!")
@@ -86,8 +112,8 @@ internal class WebViewProviderInfoHelper(classLoader: ClassLoader, private val p
                     label,
                     true,
                     false,
-                    signatures
-                )
+                    signatures,
+                ),
             )
         }
         val webViewProviderInfoListSize = webViewProviderInfoList.size
@@ -95,13 +121,17 @@ internal class WebViewProviderInfoHelper(classLoader: ClassLoader, private val p
             Logger.info("Any WebView not be found. Skip hook!")
             return null
         }
-        val webViewProviders = java.lang.reflect.Array.newInstance(
-            webViewProviderInfoClass,
-            webViewProviderInfoListSize
-        )
+        val webViewProviders =
+            java.lang.reflect.Array.newInstance(
+                webViewProviderInfoClass,
+                webViewProviderInfoListSize,
+            )
         System.arraycopy(
-            webViewProviderInfoList.toTypedArray(), 0, webViewProviders, 0,
-            webViewProviderInfoListSize
+            webViewProviderInfoList.toTypedArray(),
+            0,
+            webViewProviders,
+            0,
+            webViewProviderInfoListSize,
         )
         return webViewProviders
     }
