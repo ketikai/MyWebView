@@ -9,6 +9,7 @@ appcompat = "1.6.1"
 material = "1.10.0"
 xposed-api = "82"
 preference = "1.2.0"
+spotless = "8.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -23,4 +24,5 @@ androidx-preference = { group = "androidx.preference", name = "preference", vers
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 

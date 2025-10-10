@@ -1,10 +1,14 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import com.diffplug.gradle.spotless.BaseKotlinExtension
+import com.diffplug.gradle.spotless.HasBuiltinDelimiterForLicense
+import com.diffplug.spotless.LineEnding
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -27,14 +31,14 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
     buildOutputs {
         all {
             this as BaseVariantOutputImpl
-            outputFileName = "${rootProject.name}-${defaultConfig.versionName}-${name}.apk"
+            outputFileName = "${rootProject.name}-${defaultConfig.versionName}-$name.apk"
         }
     }
     buildFeatures {
@@ -65,4 +69,42 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+spotless {
+    fun applyLicenseHeader(it: HasBuiltinDelimiterForLicense) {
+        rootProject.file("HEADER.txt").run {
+            if (exists()) {
+                it.licenseHeaderFile(this)
+            }
+        }
+    }
+
+    fun applyKtlint(it: BaseKotlinExtension.KtlintConfig) {
+        var config = project.file(".editorconfig")
+        if (config.exists()) {
+            it.setEditorConfigPath(config)
+        } else {
+            config = project.rootProject.file(".editorconfig")
+            if (config.exists()) {
+                it.setEditorConfigPath(config)
+            }
+        }
+    }
+
+    encoding(Charsets.UTF_8)
+    lineEndings = LineEnding.GIT_ATTRIBUTES_FAST_ALLSAME
+
+    kotlinGradle {
+        target("*.gradle.kts")
+        applyKtlint(ktlint())
+        endWithNewline()
+    }
+
+    kotlin {
+        target("src/*/java/**/*.kt", "src/*/java/**/*.kts", "src/*/kotlin/**/*.kt", "src/*/kotlin/**/*.kts")
+        applyLicenseHeader(this)
+        applyKtlint(ktlint())
+        endWithNewline()
+    }
 }
