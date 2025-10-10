@@ -5,7 +5,7 @@ import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedHelpers
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 import pers.ketikai.lsp.mywebview.logging.Logger
-import pers.ketikai.lsp.mywebview.help.SystemServerHelper
+import pers.ketikai.lsp.mywebview.help.ContextImplHelper
 import pers.ketikai.lsp.mywebview.help.WebViewProviderInfoHelper
 
 internal class SystemImplHooker: Hooker, IXposedHookLoadPackage {
@@ -16,7 +16,7 @@ internal class SystemImplHooker: Hooker, IXposedHookLoadPackage {
         val systemImplClass =
             XposedHelpers.findClass("com.android.server.webkit.SystemImpl", classLoader)
         val webViewProviderInfoHelper =
-            WebViewProviderInfoHelper(classLoader, SystemServerHelper(classLoader))
+            WebViewProviderInfoHelper(classLoader, ContextImplHelper(classLoader))
         XposedHelpers.findAndHookMethod(
             systemImplClass,
             "getWebViewPackages",
