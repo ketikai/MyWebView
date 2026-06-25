@@ -23,3 +23,9 @@
     Apache License Version 2.0
 
 ------------------------------------------------------------------------------
+
+    AndroidHiddenApiBypass
+    (https://github.com/LSPosed/AndroidHiddenApiBypass)
+    Apache License Version 2.0
+
+------------------------------------------------------------------------------
