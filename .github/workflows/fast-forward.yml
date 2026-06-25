@@ -1,0 +1,41 @@
+name: Fast forward
+
+on:
+  pull_request:
+    types:
+    - opened
+    - reopened
+    - synchronize
+  issue_comment:
+    types:
+    - created
+    - edited
+
+jobs:
+  check:
+    if: ${{ github.event_name == 'pull_request' }}
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check fast forward is possible
+      uses: sequoia-pgp/fast-forward@v1
+      with:
+        merge: false
+        comment: always
+
+  merge:
+    if: ${{ github.event_name == 'issue_comment' && github.event.issue.pull_request && github.event.comment.body == '/fast-forward' }}
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Fast forward and merge
+      uses: sequoia-pgp/fast-forward@v1
+      with:
+        merge: true
+        comment: on-error
