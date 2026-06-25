@@ -1,28 +1,29 @@
 pluginManagement {
+    includeBuild("gradle")
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+
         mavenCentral()
         gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
         google()
-        mavenCentral()
-        maven {
-            name = "xposed"
-            url = uri("https://api.xposed.info/")
-        }
     }
 }
 
-rootProject.name = "MyWebView"
+@Suppress("UnstableApiUsage")
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+
+        mavenCentral()
+        google()
+    }
+}
+
+plugins {
+    id("logic")
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 include(":app")
  

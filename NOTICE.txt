@@ -18,7 +18,8 @@
 
 ------------------------------------------------------------------------------
 
-    XposedBridge
-    (https://github.com/rovo89/XposedBridge)
+    libxposed-api
+    (https://github.com/libxposed/api)
+    Apache License Version 2.0
 
 ------------------------------------------------------------------------------

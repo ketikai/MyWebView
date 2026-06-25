@@ -1,74 +1,42 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.diffplug.gradle.spotless.BaseKotlinExtension
 import com.diffplug.gradle.spotless.HasBuiltinDelimiterForLicense
 import com.diffplug.spotless.LineEnding
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    logic
+    application
     alias(libs.plugins.spotless)
 }
 
+base.archivesName.set("$NAME-v$VERSION_NAME-$VERSION_CODE")
+
 android {
-    namespace = "pers.ketikai.lsp.mywebview"
-    compileSdk = 36
-
     defaultConfig {
-        applicationId = "pers.ketikai.lsp.mywebview"
-        minSdk = 35
-        targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        buildConfigField["NAME"] = NAME
+    }
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
+    signingConfigs {
+        detect {
+            properties(project.file("local.properties"))
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            sign(this)
         }
-    }
-    buildOutputs {
-        all {
-            this as BaseVariantOutputImpl
-            outputFileName = "${rootProject.name}-${defaultConfig.versionName}-$name.apk"
-        }
-    }
-    buildFeatures {
-        buildConfig = true
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
 dependencies {
-    compileOnly(project.fileTree("libraries"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.preference)
-
-    compileOnly(libs.xposed.api)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    compileOnly(libs.libxposed.api)
+    implementation(libs.hidden.api.bypass)
 }
 
 spotless {

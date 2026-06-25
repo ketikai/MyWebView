@@ -1,28 +1,15 @@
 [versions]
-agp = "8.13.0"
-kotlin = "2.0.21"
-coreKtx = "1.10.1"
-junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-appcompat = "1.6.1"
-material = "1.10.0"
-xposed-api = "82"
-preference = "1.2.0"
-spotless = "8.0.0"
-
-[libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-xposed-api = { group = "de.robv.android.xposed", name = "api", version.ref = "xposed-api" }
-androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+spotless = "8.7.0"
+plugin-android = "9.2.1"
+libxposed-api = "102.0.0"
+hidden-api-bypass = "6.1"
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 
+[libraries]
+android-gradle = { module = "com.android.tools.build:gradle", version.ref = "plugin-android" }
+libxposed-api = { module = "io.github.libxposed:api", version.ref = "libxposed-api" }
+hidden-api-bypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version.ref = "hidden-api-bypass" }
+
+[bundles]
